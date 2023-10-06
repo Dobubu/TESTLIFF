@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFF test</title>
+
+    <style>
+        .copy {
+            cursor: pointer;
+            background-color: antiquewhite;
+            display: inline-block;
+            padding: 7px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="copy" class="copy">複製內容</div>
+    <div id="copyContent">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Adipisci voluptatum id error
+        asperiores repellendus eaque distinctio ipsam tenetur dolores quisquam dignissimos, provident possimus, a eos
+        quaerat reprehenderit animi officiis praesentium!</div>
+</body>
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+<script>
+    const copyBtnEl = document.querySelector("#copy")
+    const copyContentEl = document.querySelector("#copyContent")
+
+    copyBtnEl.addEventListener("click", function () {
+        const copyContent = copyContentEl.textContent;
+
+        navigator.clipboard.writeText(copyContent)
+            .then(function () {
+                alert('複製成功')
+                console.log('複製成功');
+            })
+            .catch(function (err) {
+                alert('複製失敗')
+                console.error('複製失敗', err);
+            });
+    })
+</script>
+
+<script>
+    const liffID = '2001018804-ejjwPZkk';
+
+    const isClient = liff.isInClient();
+    console.log('isClient: ', isClient);
+
+    liff.init({
+        liffId: liffID
+    }).then(() => {
+        console.log('1. LIFF init');
+
+        const hasLogin = liff.isLoggedIn();
+        console.log('2. LIFF login: ', hasLogin);
+
+        if (hasLogin) {
+            console.log('isClient: ', isClient);
+            liff.login({
+                redirectUri: 'https://ithelp.ithome.com.tw/'
+            });
+        } else {
+            console.log('isClient: ', isClient);
+        }
+    }).catch(function (error) {
+        console.error(error);
+    });
+</script>
+
+</html>
