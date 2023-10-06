@@ -10,9 +10,13 @@
         .copy {
             cursor: pointer;
             background-color: antiquewhite;
-            display: inline-block;
+            /* display: inline-block; */
             padding: 7px;
             margin-bottom: 10px;
+        }
+
+        a {
+            display: block;
         }
     </style>
 </head>
@@ -22,9 +26,68 @@
     <div id="copyContent">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Adipisci voluptatum id error
         asperiores repellendus eaque distinctio ipsam tenetur dolores quisquam dignissimos, provident possimus, a eos
         quaerat reprehenderit animi officiis praesentium!</div>
+
+    <br>
+
+    <div id="createObjectURLDownload" class="copy">下載內容 - URL.createObjectURL (txt)</div>
+    <a href="f2d56d589b0d3f0101ef09c43ddf2905.jpg" download>下載檔案 - download (img)
+        <!-- <img border="0" src="f2d56d589b0d3f0101ef09c43ddf2905.jpg" alt="kuma"> -->
+    </a>
+    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz" download>下載檔案 - download (gz)
+    </a>
+    <a href="https://dobubu.github.io/TESTLIFF/f2d56d589b0d3f0101ef09c43ddf2905.zip" download>下載檔案 - download (zip)
+    </a>
+    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz"> 下載檔案 - href (gz)</a>
+    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz?openExternalBrowser=1"> 下載檔案 -
+        openExternalBrowser 1 href (gz)</a>
+    <!-- <a href="googlechrome://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz"> 下載檔案 - googlechrome href (gz)</a> -->
+    <!-- <a href="googlechrome://navigate?url=nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz"> 下載檔案 - googlechrome navigate href (gz)</a> -->
+    <div id="windowOpenDownload" class="copy"> 下載檔案 - window.open (gz) v</div>
+    <div id="locationHrefDownload" class="copy"> 下載檔案 - location.href (gz)</div>
+    <div id="lineLiffDownload" class="copy"> 下載檔案 - liff.openWindow (zip) v</div>
+
+    <div id="error"></div>
+
+    <!-- <a href="https://lh3.googleusercontent.com/a-/AOh14GiT-vixrFpa61kJenujn2TFZh0QVZr21VGTichU=s100" download="test2">
+        <img border="0" src="https://lh3.googleusercontent.com/a-/AOh14GiT-vixrFpa61kJenujn2TFZh0QVZr21VGTichU=s100"
+            alt="test2">
+    </a> -->
 </body>
 
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+
+
+<script>
+    const liffID = '2001018804-ejjwPZkk';
+
+    const isClient = liff.isInClient();
+    console.log('isClient: ', isClient);
+    alert('isClient: 1', isClient);
+
+    liff.init({
+        liffId: liffID
+    }).then(() => {
+        console.log('1. LIFF init');
+        alert('1. LIFF init');
+
+        const hasLogin = liff.isLoggedIn();
+        console.log('2. LIFF login: ', hasLogin);
+        alert(`2. LIFF login: ', ${hasLogin ? 'login' : 'not login'}`);
+
+        if (hasLogin) {
+            console.log('isClient: ', isClient);
+            alert(`isClient: ', ${isClient ? 'isClient' : 'not isClient'}`);
+            liff.login({
+                redirectUri: 'https://ithelp.ithome.com.tw/'
+            });
+        } else {
+            alert(`isClient: 2', ${isClient ? 'isClient' : 'not isClient'}`);
+        }
+    }).catch(function (error) {
+        console.error(error);
+    });
+</script>
 
 <script>
     const copyBtnEl = document.querySelector("#copy")
@@ -43,33 +106,85 @@
                 console.error('複製失敗', err);
             });
     })
-</script>
 
-<script>
-    const liffID = '2001018804-ejjwPZkk';
+    // URL.createObjectURL(blob);
+    const urlCreateObjectDownloadEl = document.querySelector('#createObjectURLDownload');
+    urlCreateObjectDownloadEl.addEventListener('click', function () {
+        alert('點擊 URL.createObjectURL()')
 
-    const isClient = liff.isInClient();
-    console.log('isClient: ', isClient);
+        try {
+            const fileContent = '這是下載的內容。';
 
-    liff.init({
-        liffId: liffID
-    }).then(() => {
-        console.log('1. LIFF init');
+            const blob = new Blob([fileContent], { type: 'text/plain' });
 
-        const hasLogin = liff.isLoggedIn();
-        console.log('2. LIFF login: ', hasLogin);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = 'example.txt';
+            downloadLink.click();
 
-        if (hasLogin) {
-            console.log('isClient: ', isClient);
-            liff.login({
-                redirectUri: 'https://ithelp.ithome.com.tw/'
-            });
-        } else {
-            console.log('isClient: ', isClient);
+            URL.revokeObjectURL(downloadLink.href);
+
+            alert('下載成功')
+        } catch (error) {
+            alert('下載失敗', error)
         }
-    }).catch(function (error) {
-        console.error(error);
     });
+
+    const fileDownloadUrl = 'https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz'
+    const fileDownloadLIFFUrl = 'https://liff.line.me/2001018804-njlDN7YY'
+    const imgUrl = 'https://dobubu.github.io/TESTLIFF/f2d56d589b0d3f0101ef09c43ddf2905.jpg'
+    const zipUrl = 'https://dobubu.github.io/TESTLIFF/f2d56d589b0d3f0101ef09c43ddf2905.zip'
+
+    // window.open
+    const windowOpenDownloadEl = document.querySelector('#windowOpenDownload');
+    windowOpenDownloadEl.addEventListener('click', function () {
+        alert('點擊 window.open')
+
+        window.open(fileDownloadUrl, '_blank');
+    });
+
+    // location.href
+    const locationHrefDownloadEl = document.querySelector('#locationHrefDownload');
+    locationHrefDownloadEl.addEventListener('click', function () {
+        alert('點擊 location.href')
+
+        location.href = fileDownloadUrl
+    });
+
+    // liff.openWindow
+    const lineLiffDownloadEl = document.querySelector('#lineLiffDownload');
+    lineLiffDownloadEl.addEventListener('click', function () {
+        alert('點擊 liff.openWindow')
+
+        liff.openWindow({
+            url: zipUrl,
+            external: false
+        })
+
+        // fetch
+        // fetch(zipUrl)
+        //     .then(response => response.blob())
+        //     .then(blob => {
+        //         try {
+        //             const dataUrl = URL.createObjectURL(blob);
+        //             const newWindow = window.open(dataUrl, '_blank');
+
+        //             newWindow.document.close();
+        //             URL.revokeObjectURL(dataUrl);
+
+        //             alert('下載成功', dataUrl)
+        //         } catch (error) {
+        //             const el = document.getElementById("error");
+        //             el.textContent = error.message;
+
+        //             alert('下載失敗-blob', error.message)
+        //         }
+        //     })
+        //     .catch(function (err) {
+        //         alert('下載失敗', err.message)
+        //     });
+    });
+
 </script>
 
 </html>
