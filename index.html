@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIFF test</title>
+    <title>LINE LIFF</title>
 
     <style>
         .copy {
@@ -22,74 +22,97 @@
 </head>
 
 <body>
-    <div id="copy" class="copy">複製內容</div>
+    <p>46</p>
+
+    <h2>複製</h2>
+    <div id="copy" class="copy">點我複製下面內容 - navigator.clipboard</div>
     <div id="copyContent">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Adipisci voluptatum id error
         asperiores repellendus eaque distinctio ipsam tenetur dolores quisquam dignissimos, provident possimus, a eos
         quaerat reprehenderit animi officiis praesentium!</div>
 
     <br>
 
-    <div id="createObjectURLDownload" class="copy">下載內容 - URL.createObjectURL (txt)</div>
-    <a href="f2d56d589b0d3f0101ef09c43ddf2905.jpg" download>下載檔案 - download (img)
-        <!-- <img border="0" src="f2d56d589b0d3f0101ef09c43ddf2905.jpg" alt="kuma"> -->
+    <h2>下載</h2>
+    <div id="createObjectURLDownload" class="copy"> URL.createObjectURL - 下載 txt</div>
+    <a href="f2d56d589b0d3f0101ef09c43ddf2905.jpg" download>download - 下載 img
+        <!-- <img border="0" src="f2d56d589b0d3f0101ef09c43ddf2905.jpg" alt="rilakkuma"> -->
     </a>
-    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz" download>下載檔案 - download (gz)
+    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz" download>download - 下載 gz（連結本身包含下載）
     </a>
-    <a href="https://dobubu.github.io/TESTLIFF/f2d56d589b0d3f0101ef09c43ddf2905.zip" download>下載檔案 - download (zip)
+    <a href="https://dobubu.github.io/TESTLIFF/f2d56d589b0d3f0101ef09c43ddf2905.zip" download>download - 下載 zip
     </a>
-    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz"> 下載檔案 - href (gz)</a>
-    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz?openExternalBrowser=1"> 下載檔案 -
-        openExternalBrowser 1 href (gz)</a>
-    <!-- <a href="googlechrome://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz"> 下載檔案 - googlechrome href (gz)</a> -->
-    <!-- <a href="googlechrome://navigate?url=nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz"> 下載檔案 - googlechrome navigate href (gz)</a> -->
-    <div id="windowOpenDownload" class="copy"> 下載檔案 - window.open (gz) v</div>
-    <div id="locationHrefDownload" class="copy"> 下載檔案 - location.href (gz)</div>
-    <div id="lineLiffDownload" class="copy"> 下載檔案 - liff.openWindow (zip) v</div>
+    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz"> href - 下載 gz（連結本身包含下載）</a>
+    <a href="https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz?openExternalBrowser=1"> openExternalBrowser=1 - 下載 gz（連結本身包含下載）</a>
+    <div id="windowOpenDownload" class="copy"> window.open - 下載 gz（連結本身包含下載） - v</div>
+    <div id="locationHrefDownload" class="copy"> location.href - 下載 gz（連結本身包含下載）</div>
+    <div id="lineLiffDownload" class="copy"> liff.openWindow - 下載 zip v</div>
+    <div id="lineLiffDownload2" class="copy"> liff.openWindow - 下載 gz（連結本身包含下載） v</div>
 
+    <div id="profile"></div>
     <div id="error"></div>
-
-    <!-- <a href="https://lh3.googleusercontent.com/a-/AOh14GiT-vixrFpa61kJenujn2TFZh0QVZr21VGTichU=s100" download="test2">
-        <img border="0" src="https://lh3.googleusercontent.com/a-/AOh14GiT-vixrFpa61kJenujn2TFZh0QVZr21VGTichU=s100"
-            alt="test2">
-    </a> -->
 </body>
 
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-
-
 <script>
-    const liffID = '2001018804-ejjwPZkk';
+    /* LIFF init */
+
+    const liffID = '2001018804-DzL930xx';
 
     const isClient = liff.isInClient();
     console.log('isClient: ', isClient);
-    alert('isClient: 1', isClient);
 
-    liff.init({
-        liffId: liffID
-    }).then(() => {
-        console.log('1. LIFF init');
-        alert('1. LIFF init');
+    async function init() {
+        try {
+            await liff.init({
+                liffId: liffID
+            })
+            console.log('1. LIFF init');
 
-        const hasLogin = liff.isLoggedIn();
-        console.log('2. LIFF login: ', hasLogin);
-        alert(`2. LIFF login: ', ${hasLogin ? 'login' : 'not login'}`);
+            const language = liff.getLanguage()
+            const version = liff.getVersion()
+            const isInClient = liff.isInClient()
+            const isLoggedIn = liff.isLoggedIn()
+            const os = liff.getOS()
 
-        if (hasLogin) {
-            console.log('isClient: ', isClient);
-            alert(`isClient: ', ${isClient ? 'isClient' : 'not isClient'}`);
-            liff.login({
-                redirectUri: 'https://ithelp.ithome.com.tw/'
-            });
-        } else {
-            alert(`isClient: 2', ${isClient ? 'isClient' : 'not isClient'}`);
+            console.log('2. LIFF isLoggedIn: ', isLoggedIn);
+            // alert(`2. LIFF isLoggedIn: ', ${isLoggedIn ? 'login success' : 'login fail'}`);
+
+            if (!isLoggedIn) return
+
+            // liff.login({
+            //     redirectUri: 'https://ithelp.ithome.com.tw/'
+            // });
+
+            liff
+                .sendMessages([
+                    {
+                        type: "text",
+                        text: "https://nodejs.org/dist/v18.18.0/node-v18.18.0-darwin-x64.tar.gz",
+                    },
+                ])
+                .then(() => {
+                    console.log("message sent");
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                });
+
+            const profile = await liff.getProfile();
+
+            const el = document.getElementById("profile");
+            el.textContent = `${profile.userId}_${profile.displayName}`;
+        } catch (error) {
+            console.error(error.code, error.message)
+            alert(err.message)
         }
-    }).catch(function (error) {
-        console.error(error);
-    });
+    }
+
+    init()
 </script>
 
 <script>
+    /* 複製相關 */
     const copyBtnEl = document.querySelector("#copy")
     const copyContentEl = document.querySelector("#copyContent")
 
@@ -107,6 +130,7 @@
             });
     })
 
+    /* 下載相關 */
     // URL.createObjectURL(blob);
     const urlCreateObjectDownloadEl = document.querySelector('#createObjectURLDownload');
     urlCreateObjectDownloadEl.addEventListener('click', function () {
@@ -154,37 +178,24 @@
     // liff.openWindow
     const lineLiffDownloadEl = document.querySelector('#lineLiffDownload');
     lineLiffDownloadEl.addEventListener('click', function () {
-        alert('點擊 liff.openWindow')
+        alert('點擊 liff.openWindow 1')
 
         liff.openWindow({
             url: zipUrl,
             external: false
         })
-
-        // fetch
-        // fetch(zipUrl)
-        //     .then(response => response.blob())
-        //     .then(blob => {
-        //         try {
-        //             const dataUrl = URL.createObjectURL(blob);
-        //             const newWindow = window.open(dataUrl, '_blank');
-
-        //             newWindow.document.close();
-        //             URL.revokeObjectURL(dataUrl);
-
-        //             alert('下載成功', dataUrl)
-        //         } catch (error) {
-        //             const el = document.getElementById("error");
-        //             el.textContent = error.message;
-
-        //             alert('下載失敗-blob', error.message)
-        //         }
-        //     })
-        //     .catch(function (err) {
-        //         alert('下載失敗', err.message)
-        //     });
     });
 
+
+    const lineLiffDownloadEl2 = document.querySelector('#lineLiffDownload2');
+    lineLiffDownloadEl2.addEventListener('click', function () {
+        alert('點擊 liff.openWindow 2')
+
+        liff.openWindow({
+            url: fileDownloadUrl,
+            external: false
+        })
+    });
 </script>
 
 </html>
